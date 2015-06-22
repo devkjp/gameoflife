@@ -45,10 +45,8 @@ public class SimulationEngine {
 
 			Cell[] neighbourhood = new Cell[8];
 
-			// Set Buffer State for each cell
-			for (int y = 0; y < cells.length; y++) {
-				for (int x = 0; x < cells[0].length; x++) {
-
+			IntStream.range(0, cells.length).forEach( x -> {
+				IntStream.range(0, cells[0].length).forEach( y -> {
 					neighbourhood[0] = getCell(x - 1, y - 1);
 					neighbourhood[1] = getCell(x, y - 1);
 					neighbourhood[2] = getCell(x + 1, y - 1);
@@ -57,11 +55,10 @@ public class SimulationEngine {
 					neighbourhood[5] = getCell(x - 1, y + 1);
 					neighbourhood[6] = getCell(x, y + 1);
 					neighbourhood[7] = getCell(x + 1, y + 1);
-
+					
 					applyRulesAndBufferState(neighbourhood, x, y);
-
-				}
-			}
+				});
+			});
 
 			// persist buffer state
 			Arrays.stream(cells).forEach( row -> Arrays.stream(row).forEach( cell -> saveNewCellState(cell) ) );

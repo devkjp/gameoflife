@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -86,13 +88,14 @@ public class SwingGUI implements ifGUI {
 		wrappers = new CellWrapper[cells.length][cells[0].length];	
 		CellWrapperMouseListener listener = new CellWrapperMouseListener();
 		
-		for (int i=0 ;i<wrappers.length; i++){
-			for (int j=0; j<wrappers[0].length; j++){
+		IntStream.range(0, wrappers.length).forEach( i -> {
+			IntStream.range(0, wrappers[0].length).forEach( j -> {
 				wrappers[i][j] = new CellWrapper(cells[i][j]);
 				gamePanel.add(wrappers[i][j]);
 				wrappers[i][j].addMouseListener(listener);
-			}
-		}	
+			});
+		});
+		
 		frame.setVisible(true);
 	}
 
@@ -101,11 +104,10 @@ public class SwingGUI implements ifGUI {
 		int cellWidth = gamePanel.getWidth() / cells[0].length;
 		int cellHeight = gamePanel.getHeight() / cells.length;	
 
-		for (CellWrapper[] row: wrappers){
-			for (CellWrapper wrapper: row){
-				wrapper.updateColor(cellWidth, cellHeight);
-			}
-		}
+		Arrays.stream(wrappers).forEach( 
+				row -> Arrays.stream(row).forEach( 
+						wrapper -> wrapper.updateColor(cellWidth, cellHeight)));
+		
 		gamePanel.validate();
 	}
 
