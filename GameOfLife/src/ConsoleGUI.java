@@ -1,9 +1,11 @@
+import java.util.Arrays;
+
 
 public class ConsoleGUI implements ifGUI {
 
 	@Override
 	public void displayArray(Cell[][] cells) {
-		System.out.printf("\n\n\n");
+		System.out.print("\n\n\n");
 		
 		for (Cell[] row: cells)
 		{

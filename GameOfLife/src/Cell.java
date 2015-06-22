@@ -39,5 +39,10 @@ public class Cell {
 		}
 		this.state = bufferState;
 	}
+
+	public void toggle() {
+		this.bufferState = (this.state == State.ALIVE) ? State.DEAD : State.ALIVE;
+		
+	}
 	
 }

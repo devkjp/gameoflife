@@ -11,6 +11,11 @@ public class CellWrapper extends JPanel {
 		this.cell = cell;
 		setBackground(getColorByCell());
 	}
+	
+	public void toggleCell(){
+		cell.toggle();
+		cell.persistBufferState();
+	}
 
 	private Color getColorByCell() {
 		if (cell.getState() == Cell.State.ALIVE) {

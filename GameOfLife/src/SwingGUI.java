@@ -1,44 +1,68 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 public class SwingGUI implements ifGUI {
 	
 	JFrame frame;
+	JPanel gamePanel;
 	CellWrapper[][] wrappers;
 	
-	public SwingGUI(Cell[][] cells){
+	public SwingGUI(SimulationEngine engine){
+		
+		Cell[][] cells = engine.getCells();
+		
 		this.frame = new JFrame("Game of Life");
-		frame.setSize(new Dimension(800,600));
+		frame.setSize(new Dimension(600,600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setLayout(new GridLayout(cells[0].length, cells.length));
+		frame.setLayout(new BorderLayout());
 		
-		wrappers = new CellWrapper[cells.length][cells[0].length];
+		this.gamePanel = new JPanel();
+		this.gamePanel.setLayout(new GridLayout(cells.length, cells[0].length));
+		
+		frame.add(gamePanel, BorderLayout.CENTER);
+		
+		JButton btnPlayPause = new JButton("Play / Pause");
+		btnPlayPause.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				engine.toggleRunningState();
+			}
+		});
+		
+		frame.add(btnPlayPause, BorderLayout.NORTH);
+		
+		wrappers = new CellWrapper[cells.length][cells[0].length];	
+		CellWrapperMouseListener listener = new CellWrapperMouseListener();
 		
 		for (int i=0 ;i<wrappers.length; i++){
-			for (int j=0; j<wrappers.length; j++){
+			for (int j=0; j<wrappers[0].length; j++){
 				wrappers[i][j] = new CellWrapper(cells[i][j]);
-				frame.add(wrappers[i][j]);
+				gamePanel.add(wrappers[i][j]);
+				wrappers[i][j].addMouseListener(listener);
 			}
 		}	
 	}
 
 	@Override
 	public void displayArray(Cell[][] cells) {
-		int cellWidth = frame.getWidth() / cells[0].length;
-		int cellHeight = frame.getHeight() / cells.length;	
+		int cellWidth = gamePanel.getWidth() / cells[0].length;
+		int cellHeight = gamePanel.getHeight() / cells.length;	
 
 		for (CellWrapper[] row: wrappers){
 			for (CellWrapper wrapper: row){
 				wrapper.updateColor(cellWidth, cellHeight);
 			}
 		}
-		frame.validate();
+		gamePanel.validate();
 	}
 
 }
