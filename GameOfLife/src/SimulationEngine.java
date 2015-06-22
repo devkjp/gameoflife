@@ -11,17 +11,14 @@ public class SimulationEngine {
 		RUNNING, PAUSE
 	}
 
-	private final EdgeMode mode;
-	private RunningState runningState;
-
 	private Cell[][] cells;
 	private Rule[] rules;
+	private GameParameter gp;
+	
+	public SimulationEngine(GameParameter gp, Rule[] rules, int xSize, int ySize) {
 
-	public SimulationEngine(EdgeMode mode, Rule[] rules, int xSize, int ySize) {
-
-		this.mode = mode;
+		this.gp = gp;
 		this.rules = rules;
-		this.runningState = RunningState.RUNNING;
 
 		this.cells = new Cell[ySize][xSize];
 		for (int y = 0; y < ySize; y++) {
@@ -45,7 +42,6 @@ public class SimulationEngine {
 	 * One tick of the simulation
 	 */
 	public void tick() {
-		if (this.runningState == RunningState.RUNNING) {
 
 			Cell[] neighbourhood = new Cell[8];
 
@@ -72,7 +68,6 @@ public class SimulationEngine {
 
 
 		}
-	}
 	
 	private void saveNewCellState(Cell c){
 		c.persistBufferState();
@@ -92,11 +87,6 @@ public class SimulationEngine {
 		});
 		
 	}
-	
-	public void toggleRunningState(){
-		this.runningState = (this.runningState == RunningState.RUNNING)? RunningState.PAUSE : RunningState.RUNNING;
-	}
-
 	/**
 	 * Returns a Cell at the given place in the cell array and treats borders in
 	 * the right way
@@ -109,13 +99,13 @@ public class SimulationEngine {
 	 */
 	private Cell getCell(int x, int y) {
 		if (x < 0) {
-			if (this.mode == EdgeMode.TORUS) {
+			if (this.gp.getEdgeMode() == EdgeMode.TORUS) {
 				x = this.cells[0].length - 1;
 			} else {
 				return new Cell();
 			}
 		} else if (x >= this.cells[0].length) {
-			if (this.mode == EdgeMode.TORUS) {
+			if (this.gp.getEdgeMode() == EdgeMode.TORUS) {
 				x = 0;
 			} else {
 				return new Cell();
@@ -123,13 +113,13 @@ public class SimulationEngine {
 		}
 
 		if (y < 0) {
-			if (this.mode == EdgeMode.TORUS) {
+			if (this.gp.getEdgeMode() == EdgeMode.TORUS) {
 				y = this.cells.length - 1;
 			} else {
 				return new Cell();
 			}
 		} else if (y >= this.cells.length) {
-			if (this.mode == EdgeMode.TORUS) {
+			if (this.gp.getEdgeMode() == EdgeMode.TORUS) {
 				y = 0;
 			} else {
 				return new Cell();

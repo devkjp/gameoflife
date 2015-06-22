@@ -4,16 +4,17 @@ public class Main {
 
 		Rule[] rules = { new RPopulation() };
 
-		SimulationEngine engine = new SimulationEngine(
-				SimulationEngine.EdgeMode.TORUS, rules, 50, 50);
+		GameParameter gp = new GameParameter(SimulationEngine.EdgeMode.TORUS,
+				SimulationEngine.RunningState.PAUSE, 
+				100);
+
+		SimulationEngine engine = new SimulationEngine(gp,rules, 50, 50);
 		
 		
 		engine.setCellAtTo(11, 12, Cell.State.ALIVE);
 		engine.setCellAtTo(12, 12, Cell.State.ALIVE);
 		engine.setCellAtTo(13, 12, Cell.State.ALIVE);
 		
-		GameParameter gp = new GameParameter(SimulationEngine.EdgeMode.TORUS,
-				SimulationEngine.RunningState.PAUSE, 100);
 		
 		ifGUI gui = new SwingGUI(gp, engine.getCells());
 		// ifGUI gui = new ConsoleGUI();

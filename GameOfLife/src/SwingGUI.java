@@ -5,8 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class SwingGUI implements ifGUI {
@@ -25,21 +29,59 @@ public class SwingGUI implements ifGUI {
 		this.gamePanel = new JPanel();
 		this.gamePanel.setLayout(new GridLayout(cells.length, cells[0].length));
 		
+		JPanel controlPanel = new JPanel();
+		
+		
 		frame.add(gamePanel, BorderLayout.CENTER);
 		
 		JButton btnPlayPause = new JButton("Play / Pause");
+		btnPlayPause.setText((gp.getRunningState() == SimulationEngine.RunningState.RUNNING)? "Pause":"Play");
+		
 		btnPlayPause.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				JButton src = (JButton) e.getSource();
 				if (gp.getRunningState() == SimulationEngine.RunningState.RUNNING){
+					src.setText("Play");
 					gp.setRunningState(SimulationEngine.RunningState.PAUSE);
 				} else {
+					src.setText("Pause");
 					gp.setRunningState(SimulationEngine.RunningState.RUNNING);
 				}
 			}
 		});
 		
-		frame.add(btnPlayPause, BorderLayout.NORTH);
+		JSlider sldTicks = new JSlider(0,1000,(int) gp.getTicks());
+		sldTicks.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider sld = (JSlider) e.getSource();
+				gp.setTicks(sld.getValue());
+			}
+		});
+		
+		JCheckBox cbTorus = new JCheckBox("Torus Mode");
+		cbTorus.setSelected((gp.getEdgeMode() == SimulationEngine.EdgeMode.TORUS));
+		cbTorus.addChangeListener( new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JCheckBox cb = (JCheckBox) e.getSource();
+				if (cb.isSelected()) {
+					gp.setEdgeMode(SimulationEngine.EdgeMode.TORUS);
+				} else {
+					gp.setEdgeMode(SimulationEngine.EdgeMode.BORDERED);
+				}
+			}
+		});
+		
+		controlPanel.add(btnPlayPause);
+		controlPanel.add(cbTorus);
+		controlPanel.add(sldTicks);
+		
+		frame.add(controlPanel, BorderLayout.NORTH);
+		
 		
 		wrappers = new CellWrapper[cells.length][cells[0].length];	
 		CellWrapperMouseListener listener = new CellWrapperMouseListener();
