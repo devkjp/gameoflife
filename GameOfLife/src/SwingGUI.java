@@ -22,7 +22,6 @@ public class SwingGUI implements ifGUI {
 		this.frame = new JFrame("Game of Life");
 		frame.setSize(new Dimension(600,600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
 		frame.setLayout(new BorderLayout());
 		
 		this.gamePanel = new JPanel();
@@ -50,6 +49,7 @@ public class SwingGUI implements ifGUI {
 				wrappers[i][j].addMouseListener(listener);
 			}
 		}	
+		frame.setVisible(true);
 	}
 
 	@Override
