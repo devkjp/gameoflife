@@ -1,3 +1,5 @@
-# gameoflife
-Implementation of Conways Game of Life
+# Game Of Life
+Another implementation of Conways Game of Life
+
+MIT License
  
