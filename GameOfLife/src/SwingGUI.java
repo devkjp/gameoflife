@@ -15,10 +15,8 @@ public class SwingGUI implements ifGUI {
 	JPanel gamePanel;
 	CellWrapper[][] wrappers;
 	
-	public SwingGUI(SimulationEngine engine){
-		
-		Cell[][] cells = engine.getCells();
-		
+	public SwingGUI(GameParameter gp, Cell[][] cells){
+				
 		this.frame = new JFrame("Game of Life");
 		frame.setSize(new Dimension(600,600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +31,11 @@ public class SwingGUI implements ifGUI {
 		btnPlayPause.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				engine.toggleRunningState();
+				if (gp.getRunningState() == SimulationEngine.RunningState.RUNNING){
+					gp.setRunningState(SimulationEngine.RunningState.PAUSE);
+				} else {
+					gp.setRunningState(SimulationEngine.RunningState.RUNNING);
+				}
 			}
 		});
 		
