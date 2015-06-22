@@ -46,45 +46,51 @@ public class SimulationEngine {
 	 */
 	public void tick() {
 		if (this.runningState == RunningState.RUNNING) {
+
+			Cell[] neighbourhood = new Cell[8];
+
+			// Set Buffer State for each cell
+			for (int y = 0; y < cells.length; y++) {
+				for (int x = 0; x < cells[0].length; x++) {
+
+					neighbourhood[0] = getCell(x - 1, y - 1);
+					neighbourhood[1] = getCell(x, y - 1);
+					neighbourhood[2] = getCell(x + 1, y - 1);
+					neighbourhood[3] = getCell(x - 1, y);
+					neighbourhood[4] = getCell(x + 1, y);
+					neighbourhood[5] = getCell(x - 1, y + 1);
+					neighbourhood[6] = getCell(x, y + 1);
+					neighbourhood[7] = getCell(x + 1, y + 1);
+
+					applyRulesAndBufferState(neighbourhood, x, y);
+
+				}
+			}
+
+			// persist buffer state
+			Arrays.stream(cells).forEach( row -> Arrays.stream(row).forEach( cell -> saveNewCellState(cell) ) );
+
+
+		}
+	}
+	
+	private void saveNewCellState(Cell c){
+		c.persistBufferState();
+		c.age();
+	}
+
+	private void applyRulesAndBufferState(Cell[] neighbourhood, int x, int y) {
+		Arrays.stream(rules).forEach( r -> {
 			try {
-
-				Cell[] neighbourhood = new Cell[8];
-
-				// Set Buffer State for each cell
-				for (int y = 0; y < cells.length; y++) {
-					for (int x = 0; x < cells[0].length; x++) {
-
-						neighbourhood[0] = getCell(x - 1, y - 1);
-						neighbourhood[1] = getCell(x, y - 1);
-						neighbourhood[2] = getCell(x + 1, y - 1);
-						neighbourhood[3] = getCell(x - 1, y);
-						neighbourhood[4] = getCell(x + 1, y);
-						neighbourhood[5] = getCell(x - 1, y + 1);
-						neighbourhood[6] = getCell(x, y + 1);
-						neighbourhood[7] = getCell(x + 1, y + 1);
-
-						for (Rule r : rules) {
-							Cell.State newState = r.apply(neighbourhood,
-									cells[y][x]);
-							cells[y][x].setBufferState(newState);
-						}
-
-					}
-				}
-
-				// persist buffer state
-				for (int y = 0; y < cells.length; y++) {
-					for (int x = 0; x < cells[0].length; x++) {
-						cells[y][x].persistBufferState();
-						cells[y][x].age();
-					}
-				}
-
-			} catch (IncorrectSizeException e) {
+				cells[y][x].setBufferState( r.apply(neighbourhood, cells[y][x]) );
+			} catch (Exception e) {
 				System.out.println("Implementation Error!");
+				e.printStackTrace();
 				System.exit(-1);
 			}
-		}
+			
+		});
+		
 	}
 	
 	public void toggleRunningState(){
