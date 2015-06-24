@@ -1,3 +1,4 @@
+package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -13,6 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import engine.Cell;
+import engine.GameParameter;
+import engine.SimulationEngine;
+import engine.SimulationEngine.EdgeMode;
+import engine.SimulationEngine.RunningState;
 
 
 public class SwingGUI implements ifGUI {
@@ -58,8 +65,7 @@ public class SwingGUI implements ifGUI {
 			
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				JSlider sld = (JSlider) e.getSource();
-				gp.setTicks(sld.getValue());
+				gp.setTicks(sldTicks.getValue());
 			}
 		});
 		
@@ -69,8 +75,7 @@ public class SwingGUI implements ifGUI {
 			
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				JCheckBox cb = (JCheckBox) e.getSource();
-				if (cb.isSelected()) {
+				if (cbTorus.isSelected()) {
 					gp.setEdgeMode(SimulationEngine.EdgeMode.TORUS);
 				} else {
 					gp.setEdgeMode(SimulationEngine.EdgeMode.BORDERED);

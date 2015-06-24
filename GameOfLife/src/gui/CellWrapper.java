@@ -1,6 +1,9 @@
+package gui;
 import java.awt.Color;
 
 import javax.swing.JPanel;
+
+import engine.Cell;
 
 public class CellWrapper extends JPanel {
 
@@ -14,11 +17,10 @@ public class CellWrapper extends JPanel {
 	
 	public void toggleCell(){
 		cell.toggle();
-		cell.persistBufferState();
 	}
 
 	private Color getColorByCell() {
-		if (cell.getState() == Cell.State.ALIVE) {
+		if (cell.isAlive()) {
 
 			switch (cell.getAge()) {
 			case 0:

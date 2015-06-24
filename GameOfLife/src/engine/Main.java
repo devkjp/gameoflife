@@ -1,3 +1,9 @@
+package engine;
+import engine.rules.RPopulation;
+import engine.rules.Rule;
+import gui.SwingGUI;
+import gui.ifGUI;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -9,7 +15,6 @@ public class Main {
 				100);
 
 		SimulationEngine engine = new SimulationEngine(gp,rules, 50, 50);
-		
 		
 		engine.setCellAtTo(11, 12, Cell.State.ALIVE);
 		engine.setCellAtTo(12, 12, Cell.State.ALIVE);

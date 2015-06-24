@@ -1,14 +1,17 @@
+package engine.rules;
 import java.util.Arrays;
+
+import engine.Cell;
 
 public class RPopulation extends Rule {
 
 	@Override
-	protected Cell.State applyRule(Cell[] neighbourhood, Cell currentCell) {
+	protected boolean applyRule(Cell[] neighbourhood, Cell currentCell) {
 
 		long liveCellCount = Arrays.stream(neighbourhood)
-				.filter(c -> (c.getState() == Cell.State.ALIVE)).count();
+				.filter(c -> (c.isAlive() == Cell.State.ALIVE)).count();
 
-		if (currentCell.getState() == Cell.State.ALIVE) {
+		if (currentCell.isAlive() == Cell.State.ALIVE) {
 			if (liveCellCount < 2 || liveCellCount > 3) {
 				return Cell.State.DEAD;
 			} else {

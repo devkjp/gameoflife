@@ -1,13 +1,16 @@
+package engine;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+import engine.rules.Rule;
+
 public class SimulationEngine {
 
-	static enum EdgeMode {
+	public static enum EdgeMode {
 		TORUS, BORDERED
 	};
 
-	static enum RunningState {
+	public static enum RunningState {
 		RUNNING, PAUSE
 	}
 
@@ -33,7 +36,7 @@ public class SimulationEngine {
 		return cells;
 	}
 
-	public void setCellAtTo(int x, int y, Cell.State state) {
+	public void setCellAtTo(int x, int y, boolean state) {
 		this.cells[y][x].setBufferState(state);
 		this.cells[y][x].persistBufferState();
 	}

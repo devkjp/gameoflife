@@ -1,4 +1,7 @@
+package gui;
 import java.util.Arrays;
+
+import engine.Cell;
 
 
 public class ConsoleGUI implements ifGUI {
@@ -7,21 +10,18 @@ public class ConsoleGUI implements ifGUI {
 	public void displayArray(Cell[][] cells) {
 		System.out.print("\n\n\n");
 		
-		for (Cell[] row: cells)
-		{
-			for (Cell cell : row)
-			{
-				System.out.print(getSymbolForCell(cell));	
-			}
+		Arrays.stream(cells).forEach( row -> {
+			
+			Arrays.stream(row).forEach(cell -> System.out.print(getSymbolForCell(cell)));
 			System.out.println();
-		}
+		});
 		
 
 	}
 
 	private String getSymbolForCell(Cell cell) {
 		
-		if(cell.getState() == Cell.State.DEAD){
+		if(cell.isAlive()){
 			return " ";
 		} else {
 			switch (cell.getAge()){

@@ -1,3 +1,6 @@
+package gui;
+import engine.Cell;
+
 
 public interface ifGUI {
 	
