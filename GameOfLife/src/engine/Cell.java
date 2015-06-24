@@ -44,7 +44,7 @@ public class Cell {
 	}
 
 	public void toggle() {
-		this.bufferIsAlive = !isAlive;
+		this.isAlive = !isAlive;
 	}
 	
 }
